@@ -26,8 +26,8 @@ public class Student implements Serializable {
     @Column(name = "forename")
     private String forename;
 
-    @Column(name = "lastname")
-    private String lastname;
+    @Column(name = "lastName")
+    private String lastName;
 
     @Column(name = "email", unique = true)
     private String email;
@@ -44,10 +44,10 @@ public class Student implements Serializable {
             student.setForename("");
         }
 
-        if ( jsonObject.containsKey("lastname")) {
-            student.setLastname(jsonObject.getString("lastname"));
+        if ( jsonObject.containsKey("lastName")) {
+            student.setLastName(jsonObject.getString("lastName"));
         } else {
-            student.setLastname("");
+            student.setLastName("");
         }
 
         if ( jsonObject.containsKey("email")) {

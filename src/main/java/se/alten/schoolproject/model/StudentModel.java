@@ -12,7 +12,7 @@ public class StudentModel {
 
     private Long id;
     private String forename;
-    private String lastname;
+    private String lastName;
     private String email;
 
     public StudentModel toModel(Student student) {
@@ -26,7 +26,7 @@ public class StudentModel {
                 return studentModel;
             default:
                 studentModel.setForename(student.getForename());
-                studentModel.setLastname(student.getLastname());
+                studentModel.setLastName(student.getLastName());
                 studentModel.setEmail(student.getEmail());
                 return studentModel;
         }

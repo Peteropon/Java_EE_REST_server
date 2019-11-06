@@ -14,11 +14,11 @@ import java.util.List;
 @Default
 public class StudentTransaction implements StudentTransactionAccess{
 
-    @PersistenceContext(unitName="school")
+    @PersistenceContext(unitName="school") // TODO: 2019-11-06 is this right unit name?
     private EntityManager entityManager;
 
     @Override
-    public List listAllStudents() {
+    public List listAllStudents() {  //replace with simple find method?
         Query query = entityManager.createQuery("SELECT s from Student s");
         return query.getResultList();
     }
@@ -40,6 +40,8 @@ public class StudentTransaction implements StudentTransactionAccess{
         //JPQL Query
         Query query = entityManager.createQuery("DELETE FROM Student s WHERE s.email = :email");
 
+        // implement this instead? entityManager.remove(entityManager.getReference());
+
         //Native Query
         //Query query = entityManager.createNativeQuery("DELETE FROM student WHERE email = :email", Student.class);
 
@@ -48,10 +50,11 @@ public class StudentTransaction implements StudentTransactionAccess{
     }
 
     @Override
-    public void updateStudent(String forename, String lastname, String email) {
-        Query updateQuery = entityManager.createNativeQuery("UPDATE student SET forename = :forename, lastname = :lastname WHERE email = :email", Student.class);
+    public void updateStudent(String forename, String lastName, String email) {
+        Query updateQuery = entityManager.createNativeQuery("UPDATE student SET forename = :forename, lastName = :lastName WHERE email = :email",
+                Student.class);
         updateQuery.setParameter("forename", forename)
-                   .setParameter("lastname", lastname)
+                   .setParameter("lastName", lastName)
                    .setParameter("email", email)
                    .executeUpdate();
     }

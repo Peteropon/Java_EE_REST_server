@@ -26,7 +26,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public StudentModel addStudent(String newStudent) {
         Student studentToAdd = student.toEntity(newStudent);
-        boolean checkForEmptyVariables = Stream.of(studentToAdd.getForename(), studentToAdd.getLastname(), studentToAdd.getEmail()).anyMatch(String::isBlank);
+        boolean checkForEmptyVariables = Stream.of(studentToAdd.getForename(), studentToAdd.getLastName(), studentToAdd.getEmail()).anyMatch(String::isBlank);
 
         if (checkForEmptyVariables) {
             studentToAdd.setForename("empty");
@@ -43,8 +43,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public void updateStudent(String forename, String lastname, String email) {
-        studentTransactionAccess.updateStudent(forename, lastname, email);
+    public void updateStudent(String forename, String lastName, String email) {
+        studentTransactionAccess.updateStudent(forename, lastName, email);
     }
 
     @Override
