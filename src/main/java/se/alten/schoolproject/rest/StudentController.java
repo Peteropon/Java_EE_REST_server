@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+
 @Stateless
 @NoArgsConstructor
 @Path("/student")
@@ -51,7 +53,7 @@ public class StudentController {
                     return Response.ok(answer).build();
             }
         } catch ( Exception e ) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(BAD_REQUEST).build();
         }
     }
 
@@ -62,7 +64,7 @@ public class StudentController {
             sal.removeStudent(email);
             return Response.ok().build();
         } catch ( Exception e ) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(BAD_REQUEST).build();
         }
     }
 

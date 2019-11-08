@@ -4,22 +4,19 @@ import se.alten.schoolproject.entity.Student;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 @Stateless
 @Default
 public class StudentTransaction implements StudentTransactionAccess{
 
-    @PersistenceContext(unitName="school") // TODO: 2019-11-06 is this right unit name?
+    @PersistenceContext(unitName="school")
     private EntityManager entityManager;
 
-    @Override
-    public List listAllStudents() {  //replace with simple find method?
-        Query query = entityManager.createQuery("SELECT s from Student s");
+    @Override // TODO: 2019-11-06 Do i add @Transactional annotation in all methods?
+    public List listAllStudents() {  // TODO: replace with simple find method?
+        TypedQuery<Student> query = entityManager.createQuery("SELECT s from Student s", Student.class);
         return query.getResultList();
     }
 
