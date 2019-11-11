@@ -2,6 +2,7 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
+import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Stateless;
@@ -11,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.*;
 
 @Stateless
 @NoArgsConstructor
@@ -28,8 +29,16 @@ public class StudentController {
             List students = sal.listAllStudents();
             return Response.ok(students).build();
         } catch ( Exception e ) {
-            return Response.status(Response.Status.CONFLICT).build();
+            return Response.status(NOT_FOUND).build();
         }
+    }
+
+    @GET
+    @Path("/name")
+    @Produces({"application/JSON"})
+    public Response showStudentByName(@QueryParam("forename") String forename) {
+        List<StudentModel> student = sal.findStudentByName(forename);
+        return Response.ok(student).build();
     }
 
     @POST
@@ -46,9 +55,9 @@ public class StudentController {
 
             switch ( answer.getForename()) {
                 case "empty":
-                    return Response.status(Response.Status.NOT_ACCEPTABLE).entity("{\"Fill in all details please\"}").build();
+                    return Response.status(NOT_ACCEPTABLE).entity("{\"Fill in all details please\"}").build();
                 case "duplicate":
-                    return Response.status(Response.Status.EXPECTATION_FAILED).entity("{\"Email already registered!\"}").build();
+                    return Response.status(EXPECTATION_FAILED).entity("{\"Email already registered!\"}").build();
                 default:
                     return Response.ok(answer).build();
             }

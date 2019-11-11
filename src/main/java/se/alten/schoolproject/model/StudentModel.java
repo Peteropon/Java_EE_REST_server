@@ -10,7 +10,7 @@ import se.alten.schoolproject.entity.Student;
 @ToString
 public class StudentModel {
 
-    private Long id;
+    //private Long id;
     private String forename;
     private String lastName;
     private String email;

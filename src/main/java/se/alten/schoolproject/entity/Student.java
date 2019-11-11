@@ -7,6 +7,8 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.io.StringReader;
 
@@ -24,12 +26,18 @@ public class Student implements Serializable {
     private Long id;
 
     @Column(name = "forename")
+    @NotNull
+    @NotEmpty
     private String forename;
 
     @Column(name = "lastName")
+    @NotNull
+    @NotEmpty
     private String lastName;
 
     @Column(name = "email", unique = true)
+    @NotNull
+    @NotEmpty
     private String email;
 
     public Student toEntity(String studentModel) {
