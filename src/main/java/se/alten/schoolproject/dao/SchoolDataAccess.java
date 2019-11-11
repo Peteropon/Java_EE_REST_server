@@ -58,16 +58,15 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         if (findStudentByEmail(email) == null) {
             throw new NoSuchEntityException();
         }
-        else {
-            studentTransactionAccess.updateStudent(forename, lastName, email);
-        }
+        else studentTransactionAccess.updateStudent(forename, lastName, email);
     }
 
     @Override
     public void updateStudentPartial(String studentModel) throws IllegalArgumentException, NoSuchEntityException{
         Student studentToUpdate = student.toEntity(studentModel);
         if (findStudentByEmail(studentToUpdate.getEmail()) == null) throw new NoSuchEntityException();
-        if (studentToUpdate.getForename().equals("") ) throw new IllegalArgumentException();
+        if (studentToUpdate.getForename().equals("")
+                || studentToUpdate.getLastName().equals("")) throw new IllegalArgumentException();
         else studentTransactionAccess.updateStudentPartial(studentToUpdate);
     }
 

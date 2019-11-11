@@ -14,8 +14,8 @@ public class StudentTransaction implements StudentTransactionAccess{
     @PersistenceContext(unitName="school")
     private EntityManager entityManager;
 
-    @Override // TODO: 2019-11-06 Do i add @Transactional annotation in all methods?
-    public List listAllStudents() {  // TODO: replace with simple find method?
+    @Override
+    public List listAllStudents() {
         TypedQuery<Student> query = entityManager.createQuery("SELECT s from Student s", Student.class);
         return query.getResultList();
     }
@@ -34,14 +34,7 @@ public class StudentTransaction implements StudentTransactionAccess{
 
     @Override
     public void removeStudent(String student) {
-        //JPQL Query
         Query query = entityManager.createQuery("DELETE FROM Student s WHERE s.email = :email");
-
-        // implement this instead? entityManager.remove(entityManager.getReference());
-
-        //Native Query
-        //Query query = entityManager.createNativeQuery("DELETE FROM student WHERE email = :email", Student.class);
-
         query.setParameter("email", student)
              .executeUpdate();
     }
