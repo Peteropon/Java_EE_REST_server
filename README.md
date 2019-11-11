@@ -24,6 +24,24 @@ Write `jboss-cli -c --file=school.cli`
 
 It should say outcome success. Write `jboss-cli -c --command=:reload` to restart the server.
 
+## HTTP Methods
+
+| HTTP | Endpoints |
+| ------ | ------ |
+| GET All| [/school/student/][1] <br> Lists all available students|
+| GET By Email| [/school/student/emails/{email}][2] <br> Returns one student with that unique email. Path parameter: email |
+| GET By Name | [/school/student/names/{name}][3]  <br> Returns one or more students. Path parameter: name|
+| POST | [/school/student/add][4] <br> Json body: { forename: "", lastName: "", email: "" } |
+| PUT | [/school/student/][5] <br> Query parameters: forename, lastname, email|
+| PATCH  | [/school/student/][6] <br> Json body: { forename: "", lastName: "", email: "" } |
+| DELETE  | [/school/student/{email}][7] <br> Path parameter: email |
 
 
+   [1]: <https://localhost:8080/school/student/>
+   [2]: <https://localhost:8080/school/student/emails/{email}>
+   [3]: <https://localhost:8080/school/student/names/{name}>
+   [4]: <https://localhost:8080/school/student/add>
+   [5]: <https://localhost:8080/school/student>
+   [6]: <https://localhost:8080/school/student/>
+   [7]: <https://localhost:8080/school/student/{email}>
  
