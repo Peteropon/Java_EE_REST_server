@@ -2,7 +2,6 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
-import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Stateless;
@@ -94,8 +93,13 @@ public class StudentController {
     }
 
     @PUT
-    public void updateStudent( @QueryParam("forename") String forename, @QueryParam("lastname") String lastname, @QueryParam("email") String email) {
-        sal.updateStudent(forename, lastname, email);
+    public Response updateStudent(@QueryParam("forename") String forename, @QueryParam("lastname") String lastname, @QueryParam("email") String email) {
+        try {
+            sal.updateStudent(forename, lastname, email);
+            return Response.status(NO_CONTENT).build();
+        } catch (Exception e) {
+            return Response.status(NOT_MODIFIED).build();
+        }
     }
 
     @PATCH

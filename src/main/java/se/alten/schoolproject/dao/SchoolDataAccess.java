@@ -44,7 +44,12 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public void updateStudent(String forename, String lastName, String email) {
-        studentTransactionAccess.updateStudent(forename, lastName, email);
+        try {
+            findStudentByEmail(email);
+            studentTransactionAccess.updateStudent(forename, lastName, email);
+        } catch (Exception e) {
+            System.err.print(e);
+        }
     }
 
     @Override
