@@ -74,4 +74,13 @@ public class StudentTransaction implements StudentTransactionAccess{
 
         return studentsFound.getResultList();
     }
+
+    @Override
+    public Student findStudentByEmail(String email) {
+        TypedQuery<Student> studentWithThisEmail = entityManager.createQuery(
+                "select s from Student s where s.email = :email", Student.class
+        );
+        studentWithThisEmail.setParameter("email", email);
+        return studentWithThisEmail.getSingleResult();
+    }
 }

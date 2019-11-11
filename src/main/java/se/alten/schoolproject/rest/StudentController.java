@@ -34,11 +34,27 @@ public class StudentController {
     }
 
     @GET
-    @Path("/name")
+    @Path("/emails")
+    @Produces({"application/JSON"})
+    public Response showStudentByEmail(@QueryParam("email") String email) {
+        try {
+            StudentModel searchResult = sal.findStudentByEmail(email);
+            return Response.ok(searchResult).build();
+        } catch (Exception e) {
+            return Response.status(NO_CONTENT).build();
+        }
+    }
+
+    @GET
+    @Path("/names")
     @Produces({"application/JSON"})
     public Response showStudentByName(@QueryParam("forename") String forename) {
-        List<StudentModel> student = sal.findStudentByName(forename);
-        return Response.ok(student).build();
+        try {
+            List<StudentModel> student = sal.findStudentByName(forename);
+            return Response.ok(student).build();
+        } catch ( Exception e) {
+            return Response.status(NO_CONTENT).build();
+        }
     }
 
     @POST
@@ -73,7 +89,7 @@ public class StudentController {
             sal.removeStudent(email);
             return Response.ok().build();
         } catch ( Exception e ) {
-            return Response.status(BAD_REQUEST).build();
+            return Response.status(NOT_ACCEPTABLE).build();
         }
     }
 

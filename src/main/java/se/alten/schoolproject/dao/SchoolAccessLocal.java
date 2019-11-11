@@ -19,4 +19,6 @@ public interface SchoolAccessLocal {
     void updateStudentPartial(String studentModel);
 
     List<StudentModel> findStudentByName(String forename);
+
+    StudentModel findStudentByEmail(String email);
 }

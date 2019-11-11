@@ -58,4 +58,10 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         List studentsWithName = studentTransactionAccess.findStudentByName(forename);
         return studentsWithName;
     }
+
+    @Override
+    public StudentModel findStudentByEmail(String email) {
+        Student studentToShow = studentTransactionAccess.findStudentByEmail(email);
+        return studentModel.toModel(studentToShow);
+    }
 }

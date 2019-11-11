@@ -15,4 +15,6 @@ public interface StudentTransactionAccess {
     void updateStudentPartial(Student studentToUpdate);
 
     List findStudentByName(String forename);
+
+    Student findStudentByEmail(String email);
 }
