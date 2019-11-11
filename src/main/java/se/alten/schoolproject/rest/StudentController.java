@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import static io.undertow.util.StatusCodes.UNPROCESSABLE_ENTITY;
 import static javax.ws.rs.core.Response.Status.*;
 
 @Stateless
@@ -66,15 +67,15 @@ public class StudentController {
     public Response addStudent(String studentModel) {
         try {
 
-            StudentModel answer = sal.addStudent(studentModel);
+            StudentModel postAnswer = sal.addStudent(studentModel);
 
-            switch ( answer.getForename()) {
+            switch ( postAnswer.getForename()) {
                 case "empty":
                     return Response.status(NOT_ACCEPTABLE).entity("{\"Fill in all details please\"}").build();
                 case "duplicate":
                     return Response.status(EXPECTATION_FAILED).entity("{\"Email already registered!\"}").build();
                 default:
-                    return Response.ok(answer).build();
+                    return Response.ok(postAnswer).build();
             }
         } catch ( Exception e ) {
             return Response.status(BAD_REQUEST).build();
@@ -88,7 +89,7 @@ public class StudentController {
             sal.removeStudent(email);
             return Response.ok().build();
         } catch ( Exception e ) {
-            return Response.status(NOT_ACCEPTABLE).build();
+            return Response.status(UNPROCESSABLE_ENTITY).build();
         }
     }
 
@@ -98,7 +99,7 @@ public class StudentController {
             sal.updateStudent(forename, lastname, email);
             return Response.status(NO_CONTENT).build();
         } catch (Exception e) {
-            return Response.status(NOT_MODIFIED).build();
+            return Response.status(UNPROCESSABLE_ENTITY).build();
         }
     }
 

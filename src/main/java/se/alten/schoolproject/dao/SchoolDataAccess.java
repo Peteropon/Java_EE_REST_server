@@ -4,6 +4,7 @@ import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 
+import javax.ejb.NoSuchEntityException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
@@ -38,18 +39,25 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public void removeStudent(String studentEmail) {
-        studentTransactionAccess.removeStudent(studentEmail);
+    public void removeStudent(String studentEmail) throws NoSuchEntityException {
+        if (findStudentByEmail(studentEmail) == null) throw new NoSuchEntityException();
+        else {
+            studentTransactionAccess.removeStudent(studentEmail);
+        }
     }
 
     @Override
-    public void updateStudent(String forename, String lastName, String email) {
-        try {
-            findStudentByEmail(email);
+    public void updateStudent(String forename, String lastName, String email) throws NoSuchEntityException{
+        if (findStudentByEmail(email) == null) {
+            throw new NoSuchEntityException();
+        } else {
             studentTransactionAccess.updateStudent(forename, lastName, email);
-        } catch (Exception e) {
-            System.err.print(e);
         }
+//        try {
+//            findStudentByEmail(email);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
