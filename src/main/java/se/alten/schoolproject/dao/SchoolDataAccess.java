@@ -22,8 +22,13 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     StudentTransactionAccess studentTransactionAccess;
 
     @Override
-    public List listAllStudents(){
-        return studentTransactionAccess.listAllStudents();
+    public List listAllStudents() {
+        List studentList = studentTransactionAccess.listAllStudents();
+        List<StudentModel> studentModelList = new ArrayList<>();
+        for (int i = 0; i < studentList.size(); i++) {
+            studentModelList.add(studentModel.toModel((Student) studentList.get(i)));
+        }
+        return studentModelList;
     }
 
     @Override
@@ -68,14 +73,14 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public List findStudentByName(String forename) throws NoResultException {
-        List studentsWithName = studentTransactionAccess.findStudentByName(forename);
-        List studentModels = new ArrayList();
-        if (studentsWithName.size() == 0) throw new NoResultException();
+        List namesAsStudent = studentTransactionAccess.findStudentByName(forename);
+        List<StudentModel> namesAsModel = new ArrayList<>();
+        if (namesAsStudent.size() == 0) throw new NoResultException();
         else {
-            for (int i = 0; i < studentsWithName.size(); i++) {
-                studentModels.add(studentModel.toModel((Student) studentsWithName.get(i)));
+            for (int i = 0; i < namesAsStudent.size(); i++) {
+                namesAsModel.add(studentModel.toModel((Student) namesAsStudent.get(i)));
             }
-            return studentModels;
+            return namesAsModel;
         }
     }
 
