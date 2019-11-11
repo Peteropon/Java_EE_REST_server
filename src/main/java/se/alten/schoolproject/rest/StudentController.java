@@ -53,7 +53,7 @@ public class StudentController {
             List student = sal.findStudentByName(forename);
             return Response.ok(student).build();
         } catch ( Exception e) {
-            return Response.status(NO_CONTENT).build();
+            return Response.status(UNPROCESSABLE_ENTITY).entity(e.getMessage()).build();
         }
     }
 

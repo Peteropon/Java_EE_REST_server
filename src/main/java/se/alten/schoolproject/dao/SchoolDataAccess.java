@@ -8,6 +8,7 @@ import javax.ejb.NoSuchEntityException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -66,9 +67,16 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public List findStudentByName(String forename) {
+    public List findStudentByName(String forename) throws NoResultException {
         List studentsWithName = studentTransactionAccess.findStudentByName(forename);
-        return studentsWithName;
+        List studentModels = new ArrayList();
+        if (studentsWithName.size() == 0) throw new NoResultException();
+        else {
+            for (int i = 0; i < studentsWithName.size(); i++) {
+                studentModels.add(studentModel.toModel((Student) studentsWithName.get(i)));
+            }
+            return studentModels;
+        }
     }
 
     @Override
