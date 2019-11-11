@@ -41,7 +41,7 @@ public class StudentController {
             StudentModel searchResult = sal.findStudentByEmail(email);
             return Response.ok(searchResult).build();
         } catch (Exception e) {
-            return Response.status(NO_CONTENT).build();
+            return Response.status(UNPROCESSABLE_ENTITY).entity(e.getMessage()).build();
         }
     }
 
@@ -50,7 +50,7 @@ public class StudentController {
     @Produces({"application/JSON"})
     public Response showStudentByName(@QueryParam("forename") String forename) {
         try {
-            List<StudentModel> student = sal.findStudentByName(forename);
+            List student = sal.findStudentByName(forename);
             return Response.ok(student).build();
         } catch ( Exception e) {
             return Response.status(NO_CONTENT).build();
@@ -66,19 +66,18 @@ public class StudentController {
      */
     public Response addStudent(String studentModel) {
         try {
-
             StudentModel postAnswer = sal.addStudent(studentModel);
 
             switch ( postAnswer.getForename()) {
                 case "empty":
                     return Response.status(NOT_ACCEPTABLE).entity("{\"Fill in all details please\"}").build();
                 case "duplicate":
-                    return Response.status(EXPECTATION_FAILED).entity("{\"Email already registered!\"}").build();
+                    return Response.status(CONFLICT).entity("{\"Email already registered!\"}").build();
                 default:
                     return Response.ok(postAnswer).build();
             }
         } catch ( Exception e ) {
-            return Response.status(BAD_REQUEST).build();
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
@@ -99,12 +98,17 @@ public class StudentController {
             sal.updateStudent(forename, lastname, email);
             return Response.status(NO_CONTENT).build();
         } catch (Exception e) {
-            return Response.status(UNPROCESSABLE_ENTITY).build();
+            return Response.status(UNPROCESSABLE_ENTITY).entity(e.getMessage()).build();
         }
     }
 
     @PATCH
-    public void updatePartialAStudent(String studentModel) {
-        sal.updateStudentPartial(studentModel);
+    public Response updatePartialAStudent(String studentModel) {
+        try {
+            sal.updateStudentPartial(studentModel);
+            return Response.status(NO_CONTENT).build();
+        } catch (Exception e) {
+            return Response.status(UNPROCESSABLE_ENTITY).entity(e.getMessage()).build();
+        }
     }
 }

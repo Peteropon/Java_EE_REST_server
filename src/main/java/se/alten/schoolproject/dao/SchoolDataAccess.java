@@ -7,6 +7,7 @@ import se.alten.schoolproject.transaction.StudentTransactionAccess;
 import javax.ejb.NoSuchEntityException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -25,7 +26,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public StudentModel addStudent(String newStudent) {
+    public StudentModel addStudent(String newStudent) throws IllegalArgumentException {
         Student studentToAdd = student.toEntity(newStudent);
         boolean checkForEmptyVariables = Stream.of(studentToAdd.getForename(), studentToAdd.getLastName(), studentToAdd.getEmail()).anyMatch(String::isBlank);
 
@@ -50,31 +51,30 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     public void updateStudent(String forename, String lastName, String email) throws NoSuchEntityException{
         if (findStudentByEmail(email) == null) {
             throw new NoSuchEntityException();
-        } else {
+        }
+        else {
             studentTransactionAccess.updateStudent(forename, lastName, email);
         }
-//        try {
-//            findStudentByEmail(email);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override
-    public void updateStudentPartial(String studentModel) {
+    public void updateStudentPartial(String studentModel) throws IllegalArgumentException, NoSuchEntityException{
         Student studentToUpdate = student.toEntity(studentModel);
-        studentTransactionAccess.updateStudentPartial(studentToUpdate);
+        if (findStudentByEmail(studentToUpdate.getEmail()) == null) throw new NoSuchEntityException();
+        if (studentToUpdate.getForename().equals("") ) throw new IllegalArgumentException();
+        else studentTransactionAccess.updateStudentPartial(studentToUpdate);
     }
 
     @Override
-    public List<StudentModel> findStudentByName(String forename) {
+    public List findStudentByName(String forename) {
         List studentsWithName = studentTransactionAccess.findStudentByName(forename);
         return studentsWithName;
     }
 
     @Override
-    public StudentModel findStudentByEmail(String email) {
+    public StudentModel findStudentByEmail(String email) throws NoResultException {
         Student studentToShow = studentTransactionAccess.findStudentByEmail(email);
-        return studentModel.toModel(studentToShow);
+        if (studentToShow == null) throw new NoResultException();
+        else return studentModel.toModel(studentToShow);
     }
 }
