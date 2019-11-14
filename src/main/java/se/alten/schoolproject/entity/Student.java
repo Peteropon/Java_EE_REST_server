@@ -1,16 +1,13 @@
 package se.alten.schoolproject.entity;
 
 import lombok.*;
-import se.alten.schoolproject.model.StudentModel;
-
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import javax.json.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.util.*;
 
 @Entity
 @Table(name="student")
@@ -18,11 +15,13 @@ import java.io.StringReader;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Student implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
 
     @Column(name = "forename")
@@ -40,7 +39,19 @@ public class Student implements Serializable {
     @NotEmpty
     private String email;
 
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "student_subject",
+                joinColumns=@JoinColumn(name="stud_id", referencedColumnName = "id"),
+                inverseJoinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"))
+    private Set<Subject> subject = new HashSet<>();
+
+    @Transient
+    private List<String> subjects = new ArrayList<>();
+
     public Student toEntity(String studentModel) {
+
+        List<String> temp = new ArrayList<>();
+
         JsonReader reader = Json.createReader(new StringReader(studentModel));
 
         JsonObject jsonObject = reader.readObject();
@@ -62,6 +73,16 @@ public class Student implements Serializable {
             student.setEmail(jsonObject.getString("email"));
         } else {
             student.setEmail("");
+        }
+
+        if (jsonObject.containsKey("subject")) {
+            JsonArray jsonArray = jsonObject.getJsonArray("subject");
+            for ( int i = 0; i < jsonArray.size(); i++ ){
+                temp.add(jsonArray.get(i).toString().replace("\"", ""));
+                student.setSubjects(temp);
+            }
+        } else {
+            student.setSubjects(null);
         }
 
         return student;
