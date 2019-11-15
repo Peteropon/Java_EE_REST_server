@@ -51,7 +51,7 @@ public class StudentModel implements Serializable {
         students.forEach(student -> {
             StudentModel sm = new StudentModel();
             sm.forename = student.getForename();
-            sm.lastname = student.getLastname();
+            sm.lastName = student.getLastName();
             sm.email = student.getEmail();
             student.getSubject().forEach(subject -> {
                 sm.subjects.add(subject.getTitle());

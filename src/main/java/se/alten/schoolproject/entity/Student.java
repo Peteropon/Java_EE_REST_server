@@ -29,7 +29,7 @@ public class Student implements Serializable {
     @NotEmpty
     private String forename;
 
-    @Column(name = "lastName")
+    @Column(name = "lastname")
     @NotNull
     @NotEmpty
     private String lastName;
@@ -63,8 +63,8 @@ public class Student implements Serializable {
             student.setForename("");
         }
 
-        if ( jsonObject.containsKey("lastName")) {
-            student.setLastName(jsonObject.getString("lastName"));
+        if ( jsonObject.containsKey("lastname")) {
+            student.setLastName(jsonObject.getString("lastname"));
         } else {
             student.setLastName("");
         }

@@ -10,11 +10,8 @@ import se.alten.schoolproject.transaction.SubjectTransactionAccess;
 import javax.ejb.NoSuchEntityException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -34,8 +31,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public List listAllStudents(){
-        List<StudentModel> sm = studentModel.toModelList(studentTransactionAccess.listAllStudents());
-        return sm;
+        return studentModel.toModelList(studentTransactionAccess.listAllStudents());
     }
 
     @Override

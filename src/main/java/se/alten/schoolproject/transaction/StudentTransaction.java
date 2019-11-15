@@ -5,7 +5,6 @@ import se.alten.schoolproject.entity.Student;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Stateless
@@ -17,7 +16,7 @@ public class StudentTransaction implements StudentTransactionAccess{
 
     @Override
     public List listAllStudents() {
-        Query query = entityManager.createQuery("SELECT s FROM Student s JOIN FETCH s.subject t");
+        TypedQuery query = entityManager.createQuery("SELECT s FROM Student s JOIN FETCH s.subject t", Student.class);
         return query.getResultList();
     }
 
