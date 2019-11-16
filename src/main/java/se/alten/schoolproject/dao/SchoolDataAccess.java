@@ -31,7 +31,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public List listAllStudents(){
-        return studentModel.toModelList(studentTransactionAccess.listAllStudents());
+        List<Student> studentList = studentTransactionAccess.listAllStudents();
+        return studentModel.toModelList(studentList);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class Subject implements Serializable {
     @Column
     private String title;
 
-    @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Student> students = new HashSet<>();
 
     public Subject toEntity(String subjectModel) {
