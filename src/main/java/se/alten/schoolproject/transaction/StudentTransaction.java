@@ -15,8 +15,8 @@ public class StudentTransaction implements StudentTransactionAccess{
     private EntityManager entityManager;
 
     @Override
-    public List listAllStudents() {
-        TypedQuery query = entityManager.createQuery("SELECT s FROM Student s JOIN FETCH s.subject t", Student.class);
+    public List<Student> listAllStudents() {
+        Query query = entityManager.createQuery("SELECT s FROM Student s JOIN FETCH s.subject t", Student.class);
         return query.getResultList();
     }
 

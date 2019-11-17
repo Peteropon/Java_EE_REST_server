@@ -30,7 +30,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     SubjectTransactionAccess subjectTransactionAccess;
 
     @Override
-    public List listAllStudents(){
+    public List<StudentModel> listAllStudents(){
         List<Student> studentList = studentTransactionAccess.listAllStudents();
         return studentModel.toModelList(studentList);
     }

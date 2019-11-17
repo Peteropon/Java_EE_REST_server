@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.util.*;
 
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 @Table(name="student")
 @NoArgsConstructor
@@ -39,7 +42,7 @@ public class Student implements Serializable {
     @NotEmpty
     private String email;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = PERSIST, fetch = EAGER)
     @JoinTable(name = "student_subject",
                 joinColumns = @JoinColumn(name="stud_id", referencedColumnName = "id"),
                 inverseJoinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"))
