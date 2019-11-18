@@ -8,7 +8,7 @@ import java.util.List;
 
 @Local
 public interface StudentTransactionAccess {
-    List listAllStudents();
+    List<Student> listAllStudents();
     Student addStudent(Student studentToAdd);
     void removeStudent(String student);
     void updateStudent(String forename, String lastName, String email);

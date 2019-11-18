@@ -1,14 +1,20 @@
 package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.entity.Subject;
+import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.model.StudentModel;
+import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.model.TeacherModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
+import se.alten.schoolproject.transaction.SubjectTransactionAccess;
+import se.alten.schoolproject.transaction.TeacherTransactionAccess;
 
 import javax.ejb.NoSuchEntityException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import java.util.ArrayList;
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -17,18 +23,24 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     private Student student = new Student();
     private StudentModel studentModel = new StudentModel();
+    private Subject subject = new Subject();
+    private SubjectModel subjectModel = new SubjectModel();
+    private Teacher teacher = new Teacher();
+    private TeacherModel teacherModel = new TeacherModel();
 
     @Inject
     StudentTransactionAccess studentTransactionAccess;
 
+    @Inject
+    SubjectTransactionAccess subjectTransactionAccess;
+
+    @Inject
+    TeacherTransactionAccess teacherTransactionAccess;
+
     @Override
-    public List listAllStudents() {
-        List studentList = studentTransactionAccess.listAllStudents();
-        List<StudentModel> studentModelList = new ArrayList<>();
-        for (int i = 0; i < studentList.size(); i++) {
-            studentModelList.add(studentModel.toModel((Student) studentList.get(i)));
-        }
-        return studentModelList;
+    public List<StudentModel> listAllStudents(){
+        List<Student> studentList = studentTransactionAccess.listAllStudents();
+        return studentModel.toModelList(studentList);
     }
 
     @Override
@@ -40,7 +52,14 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
             studentToAdd.setForename("empty");
             return studentModel.toModel(studentToAdd);
         } else {
-            studentTransactionAccess.addStudent(studentToAdd);
+           studentTransactionAccess.addStudent(studentToAdd);
+
+            List<Subject> subjects = subjectTransactionAccess.getSubjectByName(studentToAdd.getSubjects());
+
+            subjects.forEach(sub -> {
+                studentToAdd.getSubject().add(sub);
+            });
+
             return studentModel.toModel(studentToAdd);
         }
     }
@@ -88,5 +107,90 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         Student studentToShow = studentTransactionAccess.findStudentByEmail(email);
         if (studentToShow == null) throw new NoResultException();
         else return studentModel.toModel(studentToShow);
+    }
+
+    @Override
+    public List listAllSubjects() {
+        return subjectTransactionAccess.listAllSubjects();
+    }
+
+    @Override
+    public SubjectModel addSubject(String newSubject) {
+        Subject subjectToAdd = subject.toEntity(newSubject);
+        subjectTransactionAccess.addSubject(subjectToAdd);
+        return subjectModel.toModel(subjectToAdd);
+    }
+
+    @Override
+    public void removeSubject(Long id) {
+        subjectTransactionAccess.removeSubject(id);
+    }
+
+    @Override
+    public void updateSubject(Long id, String subject) throws Exception {
+        Subject subjectToUpdate = subjectTransactionAccess.findById(id);
+        if (subjectToUpdate == null) throw new NoSuchEntityException();
+        else subjectTransactionAccess.updateSubject(id, subject);
+    }
+
+    @Override
+    public void addStudentToSubject(Long id, String email) {
+        Subject subjectToUpdate = subjectTransactionAccess.findById(id);
+        Student studentToUpdate = studentTransactionAccess.findStudentByEmail(email);
+        subjectToUpdate.addStudent(studentToUpdate);
+        //subjectTransactionAccess.addStudentToSubject(subjectToUpdate);
+        studentTransactionAccess.updateStudentPartial(studentToUpdate);
+    }
+
+    @Override
+    public void addTeacherToSubject(Long id, String email) {
+
+    }
+
+    @Override
+    public List<TeacherModel> listAllTeachers() {
+        List<Teacher> test = teacherTransactionAccess.listAllTeachers();
+        List<TeacherModel> teachersList = new ArrayList<>();
+        test.forEach(t -> {
+            System.out.println(t.getTeacherFirstName());
+            teachersList.add(teacherModel.toModel(t));
+        });
+        System.out.println("############################################################################");
+        return teachersList;
+    }
+
+    @Override
+    public TeacherModel addTeacher(String newTeacher) {
+        Teacher teacherToAdd = teacher.toEntity(newTeacher);
+        boolean checkForEmptyVariables = Stream.of(teacherToAdd.getTeacherFirstName(), teacherToAdd.getTeacherLastName(), teacherToAdd.getTeacherEmail()).anyMatch(String::isBlank);
+
+        if (checkForEmptyVariables) {
+            teacherToAdd.setTeacherFirstName("empty");
+            return teacherModel.toModel(teacherToAdd);
+        } else {
+            teacherTransactionAccess.addTeacher(teacherToAdd);
+
+            List<Subject> subjects = subjectTransactionAccess.getSubjectByName(teacherToAdd.getSubjects());
+
+            subjects.forEach(sub -> {
+                teacherToAdd.getSubject().add(sub);
+            });
+
+            return teacherModel.toModel(teacherToAdd);
+        }
+    }
+
+    @Override
+    public void removeTeacher(String email) {
+        teacherTransactionAccess.removeTeacher(email);
+//        if (fin(studentEmail) == null) throw new NoSuchEntityException();
+//        else {
+//            studentTransactionAccess.removeStudent(studentEmail);
+//        }
+    }
+
+    @Override
+    public void updateTeacher(String firstName, String lastName, String email) {
+        teacherTransactionAccess.updateTeacher(firstName, lastName, email);
     }
 }

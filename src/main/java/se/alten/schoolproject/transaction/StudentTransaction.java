@@ -15,8 +15,8 @@ public class StudentTransaction implements StudentTransactionAccess{
     private EntityManager entityManager;
 
     @Override
-    public List listAllStudents() {
-        TypedQuery<Student> query = entityManager.createQuery("SELECT s from Student s", Student.class);
+    public List<Student> listAllStudents() {
+        Query query = entityManager.createQuery("SELECT s FROM Student s JOIN FETCH s.subject t", Student.class);
         return query.getResultList();
     }
 
@@ -54,9 +54,10 @@ public class StudentTransaction implements StudentTransactionAccess{
         Student studentFound = (Student)entityManager.createQuery("SELECT s FROM Student s WHERE s.email = :email")
                 .setParameter("email", student.getEmail()).getSingleResult();
 
-        Query query = entityManager.createQuery("UPDATE Student SET forename = :studentForename WHERE email = :email");
+        Query query = entityManager.createQuery("UPDATE Student SET forename = :studentForename, subject = :subject WHERE email = :email");
         query.setParameter("studentForename", student.getForename())
                 .setParameter("email", studentFound.getEmail())
+                .setParameter("subject", studentFound.getSubject())
                 .executeUpdate();
     }
 
