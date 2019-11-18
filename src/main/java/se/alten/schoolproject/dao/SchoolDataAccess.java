@@ -111,7 +111,12 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public List listAllSubjects() {
-        return subjectTransactionAccess.listAllSubjects();
+        List subjectList = subjectTransactionAccess.listAllSubjects();
+        List<SubjectModel> subjectModels = new ArrayList<>();
+        subjectList.forEach(subject -> {
+            subjectModels.add(subjectModel.toModel((Subject) subject));
+        });
+        return subjectModels;
     }
 
     @Override
@@ -138,7 +143,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         Subject subjectToUpdate = subjectTransactionAccess.findById(id);
         Student studentToUpdate = studentTransactionAccess.findStudentByEmail(email);
         subjectToUpdate.addStudent(studentToUpdate);
-        //subjectTransactionAccess.addStudentToSubject(subjectToUpdate);
         studentTransactionAccess.updateStudentPartial(studentToUpdate);
     }
 
@@ -152,10 +156,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         List<Teacher> test = teacherTransactionAccess.listAllTeachers();
         List<TeacherModel> teachersList = new ArrayList<>();
         test.forEach(t -> {
-            System.out.println(t.getTeacherFirstName());
             teachersList.add(teacherModel.toModel(t));
         });
-        System.out.println("############################################################################");
         return teachersList;
     }
 

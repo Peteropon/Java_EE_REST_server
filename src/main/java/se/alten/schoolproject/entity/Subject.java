@@ -55,6 +55,8 @@ public class Subject implements Serializable {
 
         Subject subject = new Subject();
 
+        List<String> temp = new ArrayList<>();
+
         if ( jsonObject.containsKey("subject")) {
 
             subject.setTitle(jsonObject.getString("subject"));
@@ -64,11 +66,12 @@ public class Subject implements Serializable {
 
         if (jsonObject.containsKey("students")) {
             JsonArray jsonArray = jsonObject.getJsonArray("students");
-            for (javax.json.JsonValue jsonValue : jsonArray) {
-                studentList.add(jsonValue.toString().replace("\"", ""));
+            for (int i = 0; i < jsonArray.size(); i++) {
+                temp.add(jsonArray.get(i).toString().replace("\"", ""));
+                subject.setStudentList(temp);
             }
             subject.setStudentList(studentList);
-        }
+        } else subject.setStudentList(null);
 
         return subject;
     }
