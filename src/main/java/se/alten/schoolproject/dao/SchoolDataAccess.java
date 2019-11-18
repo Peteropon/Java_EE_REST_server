@@ -134,13 +134,29 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public List<Teacher> listAllTeachers() {
+    public void addStudentToSubject(Long id, String email) {
+        Subject subjectToUpdate = subjectTransactionAccess.findById(id);
+        Student studentToUpdate = studentTransactionAccess.findStudentByEmail(email);
+        subjectToUpdate.addStudent(studentToUpdate);
+        //subjectTransactionAccess.addStudentToSubject(subjectToUpdate);
+        studentTransactionAccess.updateStudentPartial(studentToUpdate);
+    }
+
+    @Override
+    public void addTeacherToSubject(Long id, String email) {
+
+    }
+
+    @Override
+    public List<TeacherModel> listAllTeachers() {
         List<Teacher> test = teacherTransactionAccess.listAllTeachers();
+        List<TeacherModel> teachersList = new ArrayList<>();
         test.forEach(t -> {
             System.out.println(t.getTeacherFirstName());
+            teachersList.add(teacherModel.toModel(t));
         });
         System.out.println("############################################################################");
-        return test;
+        return teachersList;
     }
 
     @Override

@@ -13,4 +13,6 @@ public interface SubjectTransactionAccess {
     void removeSubject(Long id);
     void updateSubject(Long id, String subject);
     Subject findById(Long id);
+
+    void addStudentToSubject(Subject subjectToUpdate);
 }

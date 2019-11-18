@@ -28,10 +28,7 @@ public class TeacherController {
     @Produces({"application/JSON"})
     public Response showTeachers() {
         try {
-            List<Teacher> teachers = sal.listAllTeachers();
-            teachers.forEach(t -> {
-                System.out.println(t.toString());
-            });
+            List teachers = sal.listAllTeachers();
             return Response.ok(teachers).build();
         } catch ( Exception e ) {
             return Response.status(NOT_FOUND).build();

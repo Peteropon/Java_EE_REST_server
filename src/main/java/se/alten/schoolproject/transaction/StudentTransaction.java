@@ -54,9 +54,10 @@ public class StudentTransaction implements StudentTransactionAccess{
         Student studentFound = (Student)entityManager.createQuery("SELECT s FROM Student s WHERE s.email = :email")
                 .setParameter("email", student.getEmail()).getSingleResult();
 
-        Query query = entityManager.createQuery("UPDATE Student SET forename = :studentForename WHERE email = :email");
+        Query query = entityManager.createQuery("UPDATE Student SET forename = :studentForename, subject = :subject WHERE email = :email");
         query.setParameter("studentForename", student.getForename())
                 .setParameter("email", studentFound.getEmail())
+                .setParameter("subject", studentFound.getSubject())
                 .executeUpdate();
     }
 

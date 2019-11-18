@@ -41,8 +41,8 @@ public class Subject implements Serializable {
     @ManyToMany(mappedBy = "subject", cascade = PERSIST, fetch = LAZY)
     private Set<Student> students = new HashSet<>();
 
-    @ManyToMany
-    @JoinColumn
+    @JsonIgnore
+    @ManyToMany(mappedBy = "subject", cascade = PERSIST, fetch = LAZY)
     private Set<Teacher> teacher = new HashSet<>();
 
     @Transient
@@ -62,13 +62,13 @@ public class Subject implements Serializable {
             subject.setTitle("");
         }
 
-//        if (jsonObject.containsKey("students")) {
-//            JsonArray jsonArray = jsonObject.getJsonArray("students");
-//            for (javax.json.JsonValue jsonValue : jsonArray) {
-//                studentList.add(jsonValue.toString().replace("\"", ""));
-//            }
-//            subject.setStudentList(studentList);
-//        }
+        if (jsonObject.containsKey("students")) {
+            JsonArray jsonArray = jsonObject.getJsonArray("students");
+            for (javax.json.JsonValue jsonValue : jsonArray) {
+                studentList.add(jsonValue.toString().replace("\"", ""));
+            }
+            subject.setStudentList(studentList);
+        }
 
         return subject;
     }

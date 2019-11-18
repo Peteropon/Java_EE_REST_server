@@ -65,4 +65,15 @@ public class SubjectController {
             return Response.status(UNPROCESSABLE_ENTITY).entity(e.getMessage()).build();
         }
     }
+
+    @PATCH
+    @Path("{id}/student/{email}")
+    public Response addStudentToSubject(@PathParam("id") Long id, @PathParam("email") String email) {
+        try {
+            sal.addStudentToSubject(id, email);
+            return Response.status(NO_CONTENT).build();
+        } catch (Exception e) {
+            return Response.status(UNPROCESSABLE_ENTITY).entity(e.getMessage()).build();
+        }
+    }
 }

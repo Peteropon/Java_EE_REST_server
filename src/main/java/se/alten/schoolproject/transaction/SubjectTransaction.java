@@ -1,15 +1,12 @@
 package se.alten.schoolproject.transaction;
 
-import org.hibernate.Session;
-import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+
 
 @Stateless
 @Default
@@ -20,7 +17,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
     @Override
     public List listAllSubjects() {
-        Query query = entityManager.createQuery("SELECT s FROM Subject s JOIN FETCH s.students b");
+        Query query = entityManager.createQuery("SELECT s FROM Subject s");
         return query.getResultList();
     }
 
@@ -63,7 +60,13 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
     @Override
     public Subject findById(Long id) {
-        Query query = entityManager.createQuery("SELECT s FROM Subject s WHERE s.id = :id");
-        return (Subject) query.getSingleResult();
+        Subject subject = (Subject) entityManager.createQuery("SELECT s FROM Subject s WHERE s.id = :id")
+                .setParameter("id", id).getSingleResult();
+        return subject;
+    }
+
+    @Override
+    public void addStudentToSubject(Subject subjectToUpdate) {
+        Query updateQuery = entityManager.createNativeQuery("UPDATE subject SET stu = :newSubject WHERE id = :id");
     }
 }

@@ -33,7 +33,11 @@ public interface SchoolAccessLocal {
 
     void updateSubject(Long id, String subject) throws Exception;
 
-    List<Teacher> listAllTeachers();
+    void addStudentToSubject(Long id, String email);
+
+    void addTeacherToSubject(Long id, String email);
+
+    List listAllTeachers();
 
     TeacherModel addTeacher(String teacherModel);
 
