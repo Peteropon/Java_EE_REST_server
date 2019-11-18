@@ -1,27 +1,29 @@
 package se.alten.schoolproject.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Teacher {
+@ToString
+public class Teacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,10 +37,10 @@ public class Teacher {
     @Column
     private String teacherLastName;
 
-    @Column
+    @Column(unique = true)
     private String teacherEmail;
 
-    @ManyToMany
+    @ManyToMany(cascade = PERSIST, fetch = LAZY)
     private Set<Subject> subject = new HashSet<>();
 
     @Transient

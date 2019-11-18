@@ -55,7 +55,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
     @Override
     public void updateSubject(Long id, String newSubject) {
-        Query updateQuery = entityManager.createNativeQuery("UPDATE subject SET subject.title = :newSubject WHERE subject.id = :id");
+        Query updateQuery = entityManager.createNativeQuery("UPDATE subject SET title = :newSubject WHERE id = :id");
         updateQuery.setParameter("title", newSubject)
                 .setParameter("id", id)
                 .executeUpdate();

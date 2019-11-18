@@ -28,7 +28,6 @@ public class StudentController {
     public Response showStudents() {
         try {
             List students = sal.listAllStudents();
-            System.out.println(students.toString());
             return Response.ok(students).build();
         } catch ( Exception e ) {
             return Response.status(NOT_FOUND).build();

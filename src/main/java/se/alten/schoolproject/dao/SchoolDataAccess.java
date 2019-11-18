@@ -2,11 +2,13 @@ package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
+import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
 import se.alten.schoolproject.model.TeacherModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 import se.alten.schoolproject.transaction.SubjectTransactionAccess;
+import se.alten.schoolproject.transaction.TeacherTransactionAccess;
 
 import javax.ejb.NoSuchEntityException;
 import javax.ejb.Stateless;
@@ -23,6 +25,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     private StudentModel studentModel = new StudentModel();
     private Subject subject = new Subject();
     private SubjectModel subjectModel = new SubjectModel();
+    private Teacher teacher = new Teacher();
+    private TeacherModel teacherModel = new TeacherModel();
 
     @Inject
     StudentTransactionAccess studentTransactionAccess;
@@ -30,7 +34,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Inject
     SubjectTransactionAccess subjectTransactionAccess;
 
-
+    @Inject
+    TeacherTransactionAccess teacherTransactionAccess;
 
     @Override
     public List<StudentModel> listAllStudents(){
@@ -129,22 +134,47 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public List listAllTeachers() {
-        return null;
+    public List<Teacher> listAllTeachers() {
+        List<Teacher> test = teacherTransactionAccess.listAllTeachers();
+        test.forEach(t -> {
+            System.out.println(t.getTeacherFirstName());
+        });
+        System.out.println("############################################################################");
+        return test;
     }
 
     @Override
-    public TeacherModel addTeacher(String teacherModel) {
-        return null;
+    public TeacherModel addTeacher(String newTeacher) {
+        Teacher teacherToAdd = teacher.toEntity(newTeacher);
+        boolean checkForEmptyVariables = Stream.of(teacherToAdd.getTeacherFirstName(), teacherToAdd.getTeacherLastName(), teacherToAdd.getTeacherEmail()).anyMatch(String::isBlank);
+
+        if (checkForEmptyVariables) {
+            teacherToAdd.setTeacherFirstName("empty");
+            return teacherModel.toModel(teacherToAdd);
+        } else {
+            teacherTransactionAccess.addTeacher(teacherToAdd);
+
+            List<Subject> subjects = subjectTransactionAccess.getSubjectByName(teacherToAdd.getSubjects());
+
+            subjects.forEach(sub -> {
+                teacherToAdd.getSubject().add(sub);
+            });
+
+            return teacherModel.toModel(teacherToAdd);
+        }
     }
 
     @Override
-    public void removeTeacher(Long id) {
-
+    public void removeTeacher(String email) {
+        teacherTransactionAccess.removeTeacher(email);
+//        if (fin(studentEmail) == null) throw new NoSuchEntityException();
+//        else {
+//            studentTransactionAccess.removeStudent(studentEmail);
+//        }
     }
 
     @Override
     public void updateTeacher(String firstName, String lastName, String email) {
-
+        teacherTransactionAccess.updateTeacher(firstName, lastName, email);
     }
 }

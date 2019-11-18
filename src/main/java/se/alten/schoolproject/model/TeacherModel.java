@@ -14,7 +14,6 @@ import java.util.Set;
 @ToString
 public class TeacherModel implements Serializable {
 
-    private Long id;
     private String teacherFirstName;
     private String teacherLastName;
     private String teacherEmail;
