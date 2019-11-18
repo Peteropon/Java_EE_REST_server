@@ -24,20 +24,36 @@ Write `jboss-cli -c --file=school.cli`
 
 It should say outcome success. Write `jboss-cli -c --command=:reload` to restart the server.
 
-To run mvn: `wildfly:undeploy clean:clean wildfly:deploy`
+To run `mvn: wildfly:undeploy clean:clean wildfly:deploy`
 
-## HTTP Methods
+## Methods for student
 
 | HTTP | Endpoints |
 | ------ | ------ |
 | GET All| [/school/student/][1] <br> Lists all available students|
 | GET By Email| [/school/student/emails/{email}][2] <br> Returns one student with that unique email. Path parameter: email |
 | GET By Name | [/school/student/names/{name}][3]  <br> Returns one or more students. Path parameter: name|
-| POST | [/school/student/add][4] <br> Json body: { forename: "", lastName: "", email: "" } |
+| POST | [/school/student/add][4] <br> Json body: { "forename": "", "lastName": "", "email": "" } |
 | PUT | [/school/student/][5] <br> Query parameters: forename, lastname, email|
-| PATCH  | [/school/student/][6] <br> Json body: { forename: "", lastName: "", email: "" } |
+| PATCH  | [/school/student/][6] <br> Json body: { "forename": "", "lastName": "", "email": "" } |
 | DELETE  | [/school/student/{email}][7] <br> Path parameter: email |
 
+## Methods for subject
+| HTTP | Endpoints |
+| ------ | ------ |
+| GET all | /school/subject |
+| POST | /school/subject <br> Json body: { "subject": ""} |
+| PUT | /school/subject |
+| PATCH | /school/subject/{id}/student/{email} <br> You can provide the id of the subject and the email of the student you want to assign the subject to. |
+| DELETE | /school/subject/{id} |
+
+## Methods for teacher
+| HTTP | Endpoints |
+| ------ | ------ |
+| GET all | /school/teacher |
+| POST | /school/teacher <br> Json body: { "forename": "", "lastName": "", "email": "" } |
+| PUT | /school/teacher <br> Query parameters: forename, lastname, email|
+| DELETE | /school/teacher/{email} |
 
    [1]: <https://localhost:8080/school/student/>
    [2]: <https://localhost:8080/school/student/emails/{email}>
