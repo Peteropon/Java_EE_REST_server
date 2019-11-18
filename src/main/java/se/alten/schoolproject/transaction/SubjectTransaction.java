@@ -17,7 +17,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
     @Override
     public List listAllSubjects() {
-        Query query = entityManager.createQuery("SELECT DISTINCT s FROM Subject s JOIN FETCH s.students b");
+        Query query = entityManager.createQuery("SELECT DISTINCT s FROM Subject s");
         return query.getResultList();
     }
 

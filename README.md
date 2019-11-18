@@ -24,6 +24,8 @@ Write `jboss-cli -c --file=school.cli`
 
 It should say outcome success. Write `jboss-cli -c --command=:reload` to restart the server.
 
+To run mvn: `wildfly:undeploy clean:clean wildfly:deploy`
+
 ## HTTP Methods
 
 | HTTP | Endpoints |
