@@ -20,7 +20,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
     @Override
     public List listAllSubjects() {
-        Query query = entityManager.createQuery("SELECT s FROM Subject s");
+        Query query = entityManager.createQuery("SELECT s FROM Subject s JOIN FETCH s.students b");
         return query.getResultList();
     }
 
@@ -45,4 +45,25 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
         return query.getResultList();
      }
+
+    @Override
+    public void removeSubject(Long id) {
+        Query query = entityManager.createQuery("DELETE FROM Subject s WHERE s.id = :id");
+        query.setParameter("id", id)
+                .executeUpdate();
+    }
+
+    @Override
+    public void updateSubject(Long id, String newSubject) {
+        Query updateQuery = entityManager.createNativeQuery("UPDATE subject SET subject.title = :newSubject WHERE subject.id = :id");
+        updateQuery.setParameter("title", newSubject)
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
+    @Override
+    public Subject findById(Long id) {
+        Query query = entityManager.createQuery("SELECT s FROM Subject s WHERE s.id = :id");
+        return (Subject) query.getSingleResult();
+    }
 }

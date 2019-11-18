@@ -4,6 +4,7 @@ import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.model.TeacherModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 import se.alten.schoolproject.transaction.SubjectTransactionAccess;
 
@@ -28,6 +29,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Inject
     SubjectTransactionAccess subjectTransactionAccess;
+
+
 
     @Override
     public List<StudentModel> listAllStudents(){
@@ -111,5 +114,37 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         Subject subjectToAdd = subject.toEntity(newSubject);
         subjectTransactionAccess.addSubject(subjectToAdd);
         return subjectModel.toModel(subjectToAdd);
+    }
+
+    @Override
+    public void removeSubject(Long id) {
+        subjectTransactionAccess.removeSubject(id);
+    }
+
+    @Override
+    public void updateSubject(Long id, String subject) throws Exception {
+        Subject subjectToUpdate = subjectTransactionAccess.findById(id);
+        if (subjectToUpdate == null) throw new NoSuchEntityException();
+        else subjectTransactionAccess.updateSubject(id, subject);
+    }
+
+    @Override
+    public List listAllTeachers() {
+        return null;
+    }
+
+    @Override
+    public TeacherModel addTeacher(String teacherModel) {
+        return null;
+    }
+
+    @Override
+    public void removeTeacher(Long id) {
+
+    }
+
+    @Override
+    public void updateTeacher(String firstName, String lastName, String email) {
+
     }
 }

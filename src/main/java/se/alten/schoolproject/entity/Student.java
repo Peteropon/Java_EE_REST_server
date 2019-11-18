@@ -11,6 +11,7 @@ import java.util.*;
 
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name="student")
@@ -42,7 +43,7 @@ public class Student implements Serializable {
     @NotEmpty
     private String email;
 
-    @ManyToMany(cascade = PERSIST, fetch = EAGER)
+    @ManyToMany(cascade = PERSIST, fetch = LAZY)
     @JoinTable(name = "student_subject",
                 joinColumns = @JoinColumn(name="stud_id", referencedColumnName = "id"),
                 inverseJoinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"))

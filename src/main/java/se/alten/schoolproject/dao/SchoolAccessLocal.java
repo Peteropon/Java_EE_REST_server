@@ -1,7 +1,9 @@
 package se.alten.schoolproject.dao;
 
+import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.model.TeacherModel;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -26,4 +28,16 @@ public interface SchoolAccessLocal {
     List listAllSubjects();
 
     SubjectModel addSubject(String subjectModel);
+
+    void removeSubject(Long id);
+
+    void updateSubject(Long id, String subject) throws Exception;
+
+    List listAllTeachers();
+
+    TeacherModel addTeacher(String teacherModel);
+
+    void removeTeacher(Long id);
+
+    void updateTeacher(String firstName, String lastName, String email);
 }
