@@ -1,11 +1,13 @@
 package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.model.StudentMapper;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -20,7 +22,12 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public List listAllStudents(){
-        return studentTransactionAccess.listAllStudents();
+        List list = studentTransactionAccess.listAllStudents();
+        List<StudentModel> modelList = new ArrayList<>();
+        for (Object o : list) {
+            modelList.add(StudentMapper.INSTANCE.toStudentModel((Student) o));
+        }
+        return modelList;
     }
 
     @Override
@@ -30,10 +37,10 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         if (checkForEmptyVariables) {
             studentToAdd.setForename("empty");
-            return studentModel.toModel(studentToAdd);
+            return StudentMapper.INSTANCE.toStudentModel(studentToAdd); // studentModel.toModel(studentToAdd);
         } else {
             studentTransactionAccess.addStudent(studentToAdd);
-            return studentModel.toModel(studentToAdd);
+            return StudentMapper.INSTANCE.toStudentModel(studentToAdd); //studentModel.toModel(studentToAdd);
         }
     }
 

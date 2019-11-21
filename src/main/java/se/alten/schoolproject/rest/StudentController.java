@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import static javax.ws.rs.core.Response.Status.CONFLICT;
+
 @Stateless
 @NoArgsConstructor
 @Path("/student")
@@ -26,7 +28,7 @@ public class StudentController {
             List students = sal.listAllStudents();
             return Response.ok(students).build();
         } catch ( Exception e ) {
-            return Response.status(Response.Status.CONFLICT).build();
+            return Response.status(CONFLICT).build();
         }
     }
 
